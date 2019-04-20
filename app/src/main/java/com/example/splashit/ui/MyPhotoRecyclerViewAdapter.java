@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.splashit.R;
 import com.example.splashit.ui.PhotoFragment.OnListFragmentInteractionListener;
-import com.example.splashit.ui.dummy.DummyContent.DummyItem;
+import com.example.splashit.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 

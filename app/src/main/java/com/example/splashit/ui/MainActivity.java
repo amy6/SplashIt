@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.splashit.R;
-import com.example.splashit.ui.dummy.DummyContent;
+import com.example.splashit.dummy.DummyContent;
 
 public class MainActivity extends AppCompatActivity implements PhotoFragment.OnListFragmentInteractionListener {
 

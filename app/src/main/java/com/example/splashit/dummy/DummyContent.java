@@ -1,4 +1,4 @@
-package com.example.splashit.ui.dummy;
+package com.example.splashit.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
