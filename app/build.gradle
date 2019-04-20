@@ -16,6 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes {
+        debug {
+            buildConfigField "String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY
+        }
+    }
 }
 
 dependencies {
