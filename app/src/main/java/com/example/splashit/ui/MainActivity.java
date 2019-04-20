@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.splashit.R;
-import com.example.splashit.dummy.DummyContent;
+import com.example.splashit.data.model.Photo;
 
 public class MainActivity extends AppCompatActivity implements PhotoFragment.OnListFragmentInteractionListener {
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements PhotoFragment.OnL
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-        Log.i(TAG, "Item clicked : " + item.id);
+    public void onListFragmentInteraction(Photo item) {
+        Log.i(TAG, "Item clicked : " + item.getId());
     }
 }

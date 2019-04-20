@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SplashIt</string>
+
+    <string name="no_desc_available">Description not available</string>
 </resources>

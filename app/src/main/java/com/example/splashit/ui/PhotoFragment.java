@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.splashit.R;
-import com.example.splashit.dummy.DummyContent;
-import com.example.splashit.dummy.DummyContent.DummyItem;
+import com.example.splashit.data.model.Photo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -58,6 +60,7 @@ public class PhotoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
+        ArrayList<Photo> photos = new ArrayList<>();
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -68,7 +71,7 @@ public class PhotoFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new PhotoRecyclerViewAdapter(photos, mListener));
         }
         return view;
     }
@@ -103,6 +106,6 @@ public class PhotoFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Photo item);
     }
 }
