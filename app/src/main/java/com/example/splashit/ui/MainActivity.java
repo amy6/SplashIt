@@ -22,5 +22,6 @@ public class MainActivity extends AppCompatActivity implements PhotoFragment.OnL
     @Override
     public void onListFragmentInteraction(Photo item) {
         Log.i(TAG, "Item clicked : " + item.getId());
+        getSupportFragmentManager().beginTransaction().add(R.id.container, PhotoDetailFragment.newInstance(item.getId())).commit();
     }
 }
