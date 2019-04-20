@@ -8,13 +8,12 @@ import android.widget.TextView;
 
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
-import com.example.splashit.dummy.DummyContent.DummyItem;
 import com.example.splashit.ui.PhotoFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Photo} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */

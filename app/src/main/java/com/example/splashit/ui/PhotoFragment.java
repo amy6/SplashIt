@@ -6,15 +6,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.splashit.BuildConfig;
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
+import com.example.splashit.data.network.ApiClient;
+import com.example.splashit.data.network.ApiService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A fragment representing a list of Items.
@@ -26,9 +34,11 @@ public class PhotoFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String TAG = PhotoFragment.class.getSimpleName();
     // TODO: Customize parameters
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
+    private ArrayList<Photo> photos;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,7 +70,7 @@ public class PhotoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
-        ArrayList<Photo> photos = new ArrayList<>();
+        photos = new ArrayList<>();
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -71,6 +81,20 @@ public class PhotoFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            ApiClient.getClient().create(ApiService.class)
+                    .getPhotos(BuildConfig.UNSPLASH_API_KEY).enqueue(new Callback<List<Photo>>() {
+                @Override
+                public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+                    if (response.body() != null) {
+                        photos = (ArrayList<Photo>) response.body();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Photo>> call, Throwable t) {
+                    Log.i(TAG, "Call to get photos failed " + t.getMessage());
+                }
+            });
             recyclerView.setAdapter(new PhotoRecyclerViewAdapter(photos, mListener));
         }
         return view;
