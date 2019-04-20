@@ -18,3 +18,4 @@
 .idea/vcs.xml
 app/libs/
 gradle.properties
+.idea/render.experimental.xml
