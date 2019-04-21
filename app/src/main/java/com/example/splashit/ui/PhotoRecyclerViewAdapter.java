@@ -1,9 +1,11 @@
 package com.example.splashit.ui;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.splashit.R;
@@ -37,6 +39,9 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+        holder.mImageView.setImageURI(Uri.parse(holder.mItem.getUrls().getRegular()));
+        holder.mContentView.setText(holder.mItem.getUser().getName());
+        holder.mIdView.setText("blah Blah");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,14 +61,16 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public final ImageView mImageView;
         public final TextView mIdView;
         public final TextView mContentView;
         public Photo mItem;
 
         public ViewHolder(View view) {
             super(view);
-            mIdView = (TextView) view.findViewById(R.id.title);
-            mContentView = (TextView) view.findViewById(R.id.photographer);
+            mImageView = view.findViewById(R.id.image);
+            mIdView = view.findViewById(R.id.title);
+            mContentView = view.findViewById(R.id.photographer);
         }
 
         @Override

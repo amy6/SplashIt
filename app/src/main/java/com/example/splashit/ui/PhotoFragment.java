@@ -39,6 +39,8 @@ public class PhotoFragment extends Fragment {
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
     private ArrayList<Photo> photos;
+    private RecyclerView recyclerView;
+    private PhotoRecyclerViewAdapter photoAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,32 +73,35 @@ public class PhotoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
         photos = new ArrayList<>();
+        photoAdapter = new PhotoRecyclerViewAdapter(photos, mListener);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            ApiClient.getClient().create(ApiService.class)
-                    .getPhotos(BuildConfig.UNSPLASH_API_KEY).enqueue(new Callback<List<Photo>>() {
-                @Override
-                public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
-                    if (response.body() != null) {
-                        photos = (ArrayList<Photo>) response.body();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Photo>> call, Throwable t) {
-                    Log.i(TAG, "Call to get photos failed " + t.getMessage());
-                }
-            });
-            recyclerView.setAdapter(new PhotoRecyclerViewAdapter(photos, mListener));
+            recyclerView.setAdapter(photoAdapter);
         }
+        ApiClient.getClient().create(ApiService.class)
+                .getPhotos(BuildConfig.UNSPLASH_API_KEY).enqueue(new Callback<List<Photo>>() {
+            @Override
+            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+                if (response.body() != null) {
+                    photos.addAll(response.body());
+                    Log.i(TAG, "Photos retrieved " + photos.size());
+                    photoAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Photo>> call, Throwable t) {
+                Log.i(TAG, "Call to get photos failed " + t);
+            }
+        });
         return view;
     }
 
