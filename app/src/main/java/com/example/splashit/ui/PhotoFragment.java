@@ -73,7 +73,7 @@ public class PhotoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
         photos = new ArrayList<>();
-        photoAdapter = new PhotoRecyclerViewAdapter(photos, mListener);
+        photoAdapter = new PhotoRecyclerViewAdapter(getContext(), photos, mListener);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

@@ -1,5 +1,6 @@
 package com.example.splashit.ui;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
 import com.example.splashit.ui.PhotoFragment.OnListFragmentInteractionListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,10 +23,12 @@ import java.util.List;
  */
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
 
+    private Context mContext;
     private final List<Photo> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public PhotoRecyclerViewAdapter(List<Photo> items, OnListFragmentInteractionListener listener) {
+    public PhotoRecyclerViewAdapter(Context context, List<Photo> items, OnListFragmentInteractionListener listener) {
+        mContext = context;
         mValues = items;
         mListener = listener;
     }
@@ -39,7 +43,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mImageView.setImageURI(Uri.parse(holder.mItem.getUrls().getRegular()));
+        Picasso.with(mContext).load(Uri.parse(holder.mItem.getUrls().getRegular())).into(holder.mImageView);
         holder.mContentView.setText(holder.mItem.getUser().getName());
         holder.mIdView.setText("blah Blah");
 
