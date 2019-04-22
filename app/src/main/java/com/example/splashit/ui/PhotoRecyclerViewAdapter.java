@@ -3,6 +3,7 @@ package com.example.splashit.ui;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +43,16 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        String title = mContext.getString(R.string.no_desc_available);
         holder.mItem = mValues.get(position);
         Picasso.with(mContext).load(Uri.parse(holder.mItem.getUrls().getRegular())).into(holder.mImageView);
-        holder.mContentView.setText(holder.mItem.getUser().getName());
-        holder.mIdView.setText("blah Blah");
+        holder.mPhotographerName.setText(holder.mItem.getUser().getName());
+        if (holder.mItem.getDescription() != null && !TextUtils.isEmpty(holder.mItem.getDescription().toString())) {
+            title = holder.mItem.getDescription().toString();
+        } else if (holder.mItem.getAltDescription() != null && !TextUtils.isEmpty(holder.mItem.getAltDescription())) {
+                title = holder.mItem.getAltDescription();
+        }
+        holder.mTitleText.setText(title);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,20 +73,20 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView mImageView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mTitleText;
+        public final TextView mPhotographerName;
         public Photo mItem;
 
         public ViewHolder(View view) {
             super(view);
             mImageView = view.findViewById(R.id.image);
-            mIdView = view.findViewById(R.id.title);
-            mContentView = view.findViewById(R.id.photographer);
+            mTitleText = view.findViewById(R.id.title);
+            mPhotographerName = view.findViewById(R.id.photographer);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mTitleText.getText() + "'";
         }
     }
 }
