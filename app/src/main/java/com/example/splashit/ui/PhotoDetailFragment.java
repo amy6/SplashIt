@@ -44,7 +44,7 @@ public class PhotoDetailFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.PHOTO_ID, id);
         photoDetailFragment.setArguments(bundle);
-        return new PhotoDetailFragment();
+        return photoDetailFragment;
     }
 
     @Override
@@ -56,19 +56,31 @@ public class PhotoDetailFragment extends Fragment {
     @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        if (getArguments() != null) {
+            String id = getArguments().getString(Constants.PHOTO_ID);
+            if (id != null && !TextUtils.isEmpty(id)) {
+//                photo = mViewModel.getPhoto(id);
+                ApiClient.getClient().create(ApiService.class)
+                        .getPhoto(id, BuildConfig.UNSPLASH_API_KEY)
+                        .enqueue(new Callback<Photo>() {
+                            @Override public void onResponse(Call<Photo> call, Response<Photo> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Picasso.with(getContext()).load(Uri.parse(response.body().getUrls().getRaw())).into(photoImage);
+                                }
+                            }
+
+                            @Override public void onFailure(Call<Photo> call, Throwable t) {
+                                Log.e(TAG, "Call to get photo failed : " + t);
+                            }
+                        });
+            }
+        }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(PhotoDetailViewModel.class);
-        if (getArguments() != null) {
-            String id = getArguments().getString(Constants.PHOTO_ID);
-            if (id != null && !TextUtils.isEmpty(id)) {
-                photo = mViewModel.getPhoto(id);
-            }
-        }
-
     }
 
 }
