@@ -99,7 +99,7 @@ public class PhotoFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Photo>> call, Throwable t) {
-                Log.i(TAG, "Call to get photos failed " + t);
+                Log.i(TAG, "Call to get photos failed  : " + t);
             }
         });
         return view;
