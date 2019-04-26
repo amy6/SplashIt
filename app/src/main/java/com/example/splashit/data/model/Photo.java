@@ -1,11 +1,20 @@
 package com.example.splashit.data.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "photo")
 public class Photo {
 
+    @PrimaryKey @NonNull
+    @ColumnInfo(name = "photo_id")
     @SerializedName("id")
     @Expose
     private String id;
@@ -26,16 +35,19 @@ public class Photo {
     private String color;
     @SerializedName("description")
     @Expose
-    private Object description;
+    private String description;
     @SerializedName("alt_description")
     @Expose
     private String altDescription;
+    @Ignore
     @SerializedName("urls")
     @Expose
     private Urls urls;
+    @Ignore
     @SerializedName("photoLinks")
     @Expose
     private PhotoLinks photoLinks;
+    @Ignore
     @SerializedName("categories")
     @Expose
     private List<Object> categories = null;
@@ -44,22 +56,27 @@ public class Photo {
     private Boolean sponsored;
     @SerializedName("sponsored_by")
     @Expose
-    private Object sponsoredBy;
+    private String sponsoredBy;
     @SerializedName("sponsored_impressions_id")
     @Expose
-    private Object sponsoredImpressionsId;
+    private String sponsoredImpressionsId;
     @SerializedName("likes")
     @Expose
     private Integer likes;
     @SerializedName("liked_by_user")
     @Expose
-    private Boolean likedByUser;
+    private boolean likedByUser;
+    @Ignore
     @SerializedName("current_user_collections")
     @Expose
     private List<Object> currentUserCollections = null;
+    @Ignore
     @SerializedName("user")
     @Expose
     private User user;
+
+    @ColumnInfo(name = "is_favorite")
+    private boolean isFavorite;
 
     public String getId() {
         return id;
@@ -109,11 +126,11 @@ public class Photo {
         this.color = color;
     }
 
-    public Object getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(Object description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -157,19 +174,19 @@ public class Photo {
         this.sponsored = sponsored;
     }
 
-    public Object getSponsoredBy() {
+    public String getSponsoredBy() {
         return sponsoredBy;
     }
 
-    public void setSponsoredBy(Object sponsoredBy) {
+    public void setSponsoredBy(String sponsoredBy) {
         this.sponsoredBy = sponsoredBy;
     }
 
-    public Object getSponsoredImpressionsId() {
+    public String getSponsoredImpressionsId() {
         return sponsoredImpressionsId;
     }
 
-    public void setSponsoredImpressionsId(Object sponsoredImpressionsId) {
+    public void setSponsoredImpressionsId(String sponsoredImpressionsId) {
         this.sponsoredImpressionsId = sponsoredImpressionsId;
     }
 
@@ -181,11 +198,11 @@ public class Photo {
         this.likes = likes;
     }
 
-    public Boolean getLikedByUser() {
+    public boolean getLikedByUser() {
         return likedByUser;
     }
 
-    public void setLikedByUser(Boolean likedByUser) {
+    public void setLikedByUser(boolean likedByUser) {
         this.likedByUser = likedByUser;
     }
 
@@ -205,4 +222,11 @@ public class Photo {
         this.user = user;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 }

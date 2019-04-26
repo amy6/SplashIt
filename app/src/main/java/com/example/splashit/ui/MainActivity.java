@@ -16,12 +16,12 @@ public class MainActivity extends AppCompatActivity implements PhotoFragment.OnL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.container, PhotoFragment.newInstance(2)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, PhotoFragment.newInstance(2)).commit();
     }
 
     @Override
     public void onListFragmentInteraction(Photo item) {
         Log.i(TAG, "Item clicked : " + item.getId());
-        getSupportFragmentManager().beginTransaction().add(R.id.container, PhotoDetailFragment.newInstance(item.getId())).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, PhotoDetailFragment.newInstance(item.getId())).commit();
     }
 }
