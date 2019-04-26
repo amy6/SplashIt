@@ -6,9 +6,10 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 @Entity(tableName = "photo")
 public class Photo {
@@ -54,9 +55,10 @@ public class Photo {
     @SerializedName("sponsored")
     @Expose
     private Boolean sponsored;
+    @Ignore
     @SerializedName("sponsored_by")
     @Expose
-    private String sponsoredBy;
+    private SponsoredBy sponsoredBy;
     @SerializedName("sponsored_impressions_id")
     @Expose
     private String sponsoredImpressionsId;
@@ -174,11 +176,11 @@ public class Photo {
         this.sponsored = sponsored;
     }
 
-    public String getSponsoredBy() {
+    public SponsoredBy getSponsoredBy() {
         return sponsoredBy;
     }
 
-    public void setSponsoredBy(String sponsoredBy) {
+    public void setSponsoredBy(SponsoredBy sponsoredBy) {
         this.sponsoredBy = sponsoredBy;
     }
 
