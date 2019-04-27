@@ -2,8 +2,8 @@ package com.example.splashit.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -11,6 +11,10 @@ import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
 import com.example.splashit.data.model.Photo;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,9 +65,19 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.photo_app_widget_list);
-        Log.i(TAG, "Favorites photos : " + favoritesPhotos.size() + " " + favoritesPhotos.get(position).getUrls().getThumb());
-        views.setImageViewUri(R.id.widget_photo_image, Uri.parse(favoritesPhotos.get(position).getUrls().getThumb()));
-//        views.setImageViewResource(R.id.widget_photo_image, R.drawable.ic_favorite);
+
+        HttpURLConnection connection;
+        try {
+            URL url = new URL(favoritesPhotos.get(position).getUrls().getThumb());
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            views.setImageViewBitmap(R.id.widget_photo_image, bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return views;
     }
 
