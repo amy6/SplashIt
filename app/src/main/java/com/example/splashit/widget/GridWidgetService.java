@@ -36,17 +36,14 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onCreate() {
         favoritesPhotos = new ArrayList<>();
-        Log.i(TAG, "Initializing favorites photos array list : " + favoritesPhotos.size());
         db = PhotoDatabase.getInstance(context);
     }
 
     @Override
     public void onDataSetChanged() {
-        List<Photo> photoList = db.photoDao().getFavoritesPhotos().getValue();
-        Log.i(TAG, "Favorites photos inside onDataSetChanged after DB call : " + favoritesPhotos.size());
+        List<Photo> photoList = db.photoDao().getFavoritesPhotosList();
         if (photoList != null) {
             favoritesPhotos.addAll(photoList);
-            Log.i(TAG, "Favorites photos inside onDataSetChanged after adding to list : " + favoritesPhotos.size());
         }
     }
 
@@ -58,14 +55,15 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public int getCount() {
         if (favoritesPhotos == null) return 0;
-        Log.i(TAG, "Favorites photos : " + favoritesPhotos.size());
         return favoritesPhotos.size();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.photo_app_widget_list);
-        views.setImageViewUri(R.id.widget_photo_image, Uri.parse(favoritesPhotos.get(position).getUrls().getRaw()));
+        Log.i(TAG, "Favorites photos : " + favoritesPhotos.size() + " " + favoritesPhotos.get(position).getUrls().getThumb());
+        views.setImageViewUri(R.id.widget_photo_image, Uri.parse(favoritesPhotos.get(position).getUrls().getThumb()));
+//        views.setImageViewResource(R.id.widget_photo_image, R.drawable.ic_favorite);
         return views;
     }
 

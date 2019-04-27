@@ -17,10 +17,13 @@ public interface PhotoDao {
     @Query("SELECT * FROM photo")
     LiveData<List<Photo>> getFavoritesPhotos();
 
+    @Query("SELECT * FROM photo")
+    List<Photo> getFavoritesPhotosList();
+
     @Query("SELECT is_favorite FROM photo WHERE photo_id = :photoId")
     boolean isFavorite(String photoId);
 
-    @Query("UPDATE photo SET is_favorite = :isFavorite WHERE photo_id = :photoId" )
+    @Query("UPDATE photo SET is_favorite = :isFavorite WHERE photo_id = :photoId")
     void updatePhotoFavorite(String photoId, boolean isFavorite);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

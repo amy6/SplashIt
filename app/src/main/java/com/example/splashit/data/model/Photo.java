@@ -40,7 +40,6 @@ public class Photo {
     @SerializedName("alt_description")
     @Expose
     private String altDescription;
-    @Ignore
     @SerializedName("urls")
     @Expose
     private Urls urls;
