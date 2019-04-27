@@ -3,12 +3,10 @@ package com.example.splashit.ui;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
@@ -24,9 +22,9 @@ import java.util.List;
  */
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
 
-    private Context mContext;
     private final List<Photo> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private Context mContext;
 
     public PhotoRecyclerViewAdapter(Context context, List<Photo> items, OnListFragmentInteractionListener listener) {
         mContext = context;
@@ -43,25 +41,14 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        String title = mContext.getString(R.string.no_desc_available);
         holder.mItem = mValues.get(position);
         Picasso.with(mContext).load(Uri.parse(holder.mItem.getUrls().getRegular())).into(holder.mImageView);
-        holder.mPhotographerName.setText(holder.mItem.getUser().getName());
-        if (holder.mItem.getDescription() != null && !TextUtils.isEmpty(holder.mItem.getDescription().toString())) {
-            title = holder.mItem.getDescription().toString();
-        } else if (holder.mItem.getAltDescription() != null && !TextUtils.isEmpty(holder.mItem.getAltDescription())) {
-                title = holder.mItem.getAltDescription();
-        }
-        holder.mTitleText.setText(title);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onListFragmentInteraction(holder.mItem);
             }
         });
     }
@@ -73,20 +60,11 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView mImageView;
-        public final TextView mTitleText;
-        public final TextView mPhotographerName;
         public Photo mItem;
 
         public ViewHolder(View view) {
             super(view);
             mImageView = view.findViewById(R.id.image);
-            mTitleText = view.findViewById(R.id.title);
-            mPhotographerName = view.findViewById(R.id.photographer);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mTitleText.getText() + "'";
         }
     }
 }
