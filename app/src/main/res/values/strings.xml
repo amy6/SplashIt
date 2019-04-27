@@ -8,4 +8,7 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="empty_view_text">No images available</string>
+    <string name="wallpaper">Wallpaper</string>
+    <string name="wallpaper_updat_success">Wallpaper updated</string>
+    <string name="wallpaper_updat_failure">Failed to set wallpaper. Try again later.</string>
 </resources>

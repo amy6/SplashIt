@@ -1,5 +1,6 @@
 package com.example.splashit.ui;
 
+import android.app.WallpaperManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,10 @@ import com.example.splashit.data.network.ApiService;
 import com.example.splashit.utils.AppExecutors;
 import com.example.splashit.utils.Constants;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,6 +119,18 @@ public class PhotoDetailActivity extends AppCompatActivity {
                             viewModel.updatePhotoFavorite(photoId, !isFavorite);
                         }
                 );
+                return true;
+            case R.id.wallpaper:
+                WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+                InputStream inputStream;
+                try {
+                    inputStream = new URL(photo.getUrls().getRaw()).openStream();
+                    wallpaperManager.setStream(inputStream);
+                    displayToastMessage(R.string.wallpaper_updat_success);
+                } catch (IOException e) {
+                    displayToastMessage(R.string.wallpaper_updat_failure);
+                    e.printStackTrace();
+                }
                 return true;
             case android.R.id.home:
                 finish();
