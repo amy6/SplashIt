@@ -42,7 +42,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.photo_detail_fragment);
+        setContentView(R.layout.activity_photo_detail);
 
         ButterKnife.bind(this);
 
