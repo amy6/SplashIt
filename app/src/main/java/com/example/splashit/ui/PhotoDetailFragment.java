@@ -1,6 +1,5 @@
 package com.example.splashit.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,9 +35,6 @@ public class PhotoDetailFragment extends Fragment {
     @BindView(R.id.photographer) TextView photographer;
     @BindView(R.id.title) TextView title;
 
-    private Photo photo;
-    private PhotoDetailViewModel mViewModel;
-
     public static PhotoDetailFragment newInstance(String id) {
         PhotoDetailFragment photoDetailFragment = new PhotoDetailFragment();
         Bundle bundle = new Bundle();
@@ -59,13 +55,14 @@ public class PhotoDetailFragment extends Fragment {
         if (getArguments() != null) {
             String id = getArguments().getString(Constants.PHOTO_ID);
             if (id != null && !TextUtils.isEmpty(id)) {
-//                photo = mViewModel.getPhoto(id);
                 ApiClient.getClient().create(ApiService.class)
                         .getPhoto(id, BuildConfig.UNSPLASH_API_KEY)
                         .enqueue(new Callback<Photo>() {
                             @Override public void onResponse(Call<Photo> call, Response<Photo> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    Picasso.with(getContext()).load(Uri.parse(response.body().getUrls().getRaw())).into(photoImage);
+                                    Picasso.with(getContext())
+                                            .load(Uri.parse(response.body().getUrls().getRaw()))
+                                            .into(photoImage);
                                 }
                             }
 
@@ -75,12 +72,6 @@ public class PhotoDetailFragment extends Fragment {
                         });
             }
         }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(PhotoDetailViewModel.class);
     }
 
 }

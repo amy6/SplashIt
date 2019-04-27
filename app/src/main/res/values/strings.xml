@@ -3,4 +3,6 @@
 
     <string name="no_desc_available">Description not available</string>
     <string name="favorite">Favorite</string>
+    <string name="favorites_removed">Removed from favorites</string>
+    <string name="favorites_added">Added to favorites</string>
 </resources>

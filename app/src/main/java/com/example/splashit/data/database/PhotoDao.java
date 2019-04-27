@@ -18,10 +18,10 @@ public interface PhotoDao {
     LiveData<List<Photo>> getFavoritesPhotos();
 
     @Query("SELECT is_favorite FROM photo WHERE photo_id = :photoId")
-    boolean isFavorite(int photoId);
+    boolean isFavorite(String photoId);
 
     @Query("UPDATE photo SET is_favorite = :isFavorite WHERE photo_id = :photoId" )
-    void updatePhotoFavorite(int photoId, boolean isFavorite);
+    void updatePhotoFavorite(String photoId, boolean isFavorite);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addPhotoToFavorites(Photo photo);
@@ -30,5 +30,5 @@ public interface PhotoDao {
     void removePhotoFromFavorites(Photo photo);
 
     @Query("SELECT * FROM photo WHERE photo_id = :photoId")
-    Photo getPhoto(int photoId);
+    Photo getPhoto(String photoId);
 }
