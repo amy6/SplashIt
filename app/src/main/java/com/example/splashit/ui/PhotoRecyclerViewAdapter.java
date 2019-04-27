@@ -1,6 +1,7 @@
 package com.example.splashit.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,26 +11,21 @@ import android.widget.ImageView;
 
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
-import com.example.splashit.ui.PhotoFragment.OnListFragmentInteractionListener;
+import com.example.splashit.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Photo} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Photo> mValues;
-    private final OnListFragmentInteractionListener mListener;
-    private Context mContext;
+    public static final String TAG = PhotoRecyclerViewAdapter.class.getSimpleName();
 
-    public PhotoRecyclerViewAdapter(Context context, List<Photo> items, OnListFragmentInteractionListener listener) {
-        mContext = context;
-        mValues = items;
-        mListener = listener;
+    private final List<Photo> values;
+    private Context context;
+
+    public PhotoRecyclerViewAdapter(Context context, List<Photo> items) {
+        this.context = context;
+        this.values = items;
     }
 
     @Override
@@ -41,30 +37,28 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        Picasso.with(mContext).load(Uri.parse(holder.mItem.getUrls().getRegular())).into(holder.mImageView);
+        holder.photo = values.get(position);
+        Picasso.with(context).load(Uri.parse(holder.photo.getUrls().getRegular())).into(holder.imageView);
 
         holder.itemView.setOnClickListener(v -> {
-            if (null != mListener) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-                mListener.onListFragmentInteraction(holder.mItem);
-            }
+            Intent intent = new Intent(context, PhotoDetailActivity.class);
+            intent.putExtra(Constants.PHOTO_ID, holder.photo.getId());
+            context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return values.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView mImageView;
-        public Photo mItem;
+        public final ImageView imageView;
+        public Photo photo;
 
         public ViewHolder(View view) {
             super(view);
-            mImageView = view.findViewById(R.id.image);
+            imageView = view.findViewById(R.id.image);
         }
     }
 }

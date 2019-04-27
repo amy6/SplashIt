@@ -1,32 +1,62 @@
 package com.example.splashit.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.splashit.BuildConfig;
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
-import com.example.splashit.utils.Constants;
+import com.example.splashit.data.network.ApiClient;
+import com.example.splashit.data.network.ApiService;
 
-public class PhotoListActivity extends AppCompatActivity implements PhotoFragment.OnListFragmentInteractionListener {
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class PhotoListActivity extends AppCompatActivity {
 
     private static final String TAG = PhotoListActivity.class.getSimpleName();
+
+    private ArrayList<Photo> photos;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    private PhotoRecyclerViewAdapter photoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_photo_list);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.container,
-                PhotoFragment.newInstance(2)).commit();
-    }
+        ButterKnife.bind(this);
 
-    @Override
-    public void onListFragmentInteraction(Photo item) {
-        Log.i(TAG, "Item clicked : " + item.getId());
-        Intent intent = new Intent(this, PhotoDetailActivity.class);
-        intent.putExtra(Constants.PHOTO_ID, item.getId());
-        startActivity(intent);
+        photos = new ArrayList<>();
+        photoAdapter = new PhotoRecyclerViewAdapter(this, photos);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(photoAdapter);
+
+        ApiClient.getClient().create(ApiService.class)
+                .getPhotos(BuildConfig.UNSPLASH_API_KEY).enqueue(new Callback<List<Photo>>() {
+            @Override
+            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+                if (response.body() != null) {
+                    photos.addAll(response.body());
+                    Log.i(TAG, "Photos retrieved " + photos.size());
+                    photoAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Photo>> call, Throwable t) {
+                Log.i(TAG, "Call to get photos failed  : " + t);
+            }
+        });
     }
 }
