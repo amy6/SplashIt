@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
 import com.example.splashit.data.model.Photo;
+import com.example.splashit.ui.PhotoDetailActivity;
+import com.example.splashit.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,6 +81,13 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Bundle extras = new Bundle();
+        extras.putString(Constants.PHOTO_ID, favoritesPhotos.get(position).getId());
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtras(extras);
+        views.setOnClickFillInIntent(R.id.widget_photo_image, fillInIntent);
+
         return views;
     }
 
