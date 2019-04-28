@@ -117,7 +117,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 if (!favoritesItem.isEnabled()) {
                     displayToastMessage(R.string.wallpaper_load_in_progress);
                     return false;
-            }
+                }
                 AppExecutors.getExecutorInstance().getDiskIO().execute(() -> {
                             boolean isFavorite = viewModel.isFavorite(photoId);
                             if (isFavorite) {
@@ -134,9 +134,9 @@ public class PhotoDetailActivity extends AppCompatActivity {
                                 });
                             }
                             viewModel.updatePhotoFavorite(photoId, !isFavorite);
+                            updateWidget();
                         }
                 );
-                updateWidget();
                 return true;
             case R.id.wallpaper:
                 if (!wallpaperItem.isEnabled()) {
