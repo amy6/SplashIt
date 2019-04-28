@@ -1,7 +1,9 @@
 package com.example.splashit.ui;
 
 import android.app.WallpaperManager;
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
+import com.example.splashit.PhotoAppWidget;
 import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
 import com.example.splashit.data.model.Photo;
@@ -119,6 +122,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
                             viewModel.updatePhotoFavorite(photoId, !isFavorite);
                         }
                 );
+                updateWidget();
                 return true;
             case R.id.wallpaper:
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
@@ -137,6 +141,12 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateWidget() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, PhotoAppWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
     }
 
     private void displayToastMessage(int messageId) {

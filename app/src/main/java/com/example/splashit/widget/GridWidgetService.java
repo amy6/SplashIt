@@ -57,7 +57,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDestroy() {
-        db.close();
+        
     }
 
     @Override
@@ -75,7 +75,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         HttpURLConnection connection;
         try {
-            URL url = new URL(photo.getUrls().getThumb());
+            URL url = new URL(photo.getUrls().getSmall());
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
