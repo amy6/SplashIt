@@ -16,6 +16,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
 
     public static final String TAG = PhotoRecyclerViewAdapter.class.getSimpleName();
@@ -63,12 +66,13 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView imageView;
+        @BindView(R.id.image)
+        public ImageView imageView;
         public Photo photo;
 
         public ViewHolder(View view) {
             super(view);
-            imageView = view.findViewById(R.id.image);
+            ButterKnife.bind(this, view);
         }
     }
 }
