@@ -3,6 +3,14 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            storeFile file('/Users/mahima/Documents/Projects/SplashIt_KeyStore/keystore.jks')
+            storePassword 'splash_it'
+            keyAlias = 'splashit'
+            keyPassword 'splash_it'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.splashit"
@@ -24,6 +32,7 @@ android {
         }
         release {
             buildConfigField "String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY
+            signingConfig signingConfigs.releaseConfig
         }
     }
     compileOptions {
