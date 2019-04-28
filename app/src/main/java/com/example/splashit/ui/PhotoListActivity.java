@@ -16,6 +16,7 @@ import com.example.splashit.data.model.Photo;
 import com.example.splashit.data.network.ApiClient;
 import com.example.splashit.data.network.ApiService;
 import com.example.splashit.utils.Constants;
+import com.example.splashit.utils.PhotoAppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +48,9 @@ public class PhotoListActivity extends AppCompatActivity {
 
         photos = new ArrayList<>();
         photoAdapter = new PhotoRecyclerViewAdapter(this, photos);
-        layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
+        PhotoAppUtils.setupRecyclerView(this, recyclerView);
         recyclerView.setAdapter(photoAdapter);
+        layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
 
         viewModel = ViewModelProviders.of(this).get(PhotoListViewModel.class);
         viewModel.getFavoritePhotos().observe(this, favorites -> {
