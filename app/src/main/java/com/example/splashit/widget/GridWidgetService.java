@@ -67,11 +67,14 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
+        if (favoritesPhotos == null || favoritesPhotos.size() == 0) return null;
+
+        Photo photo = favoritesPhotos.get(position);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.photo_app_widget_list);
 
         HttpURLConnection connection;
         try {
-            URL url = new URL(favoritesPhotos.get(position).getUrls().getThumb());
+            URL url = new URL(photo.getUrls().getThumb());
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
@@ -83,7 +86,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         }
 
         Bundle extras = new Bundle();
-        extras.putString(Constants.PHOTO_ID, favoritesPhotos.get(position).getId());
+        extras.putString(Constants.PHOTO_ID, photo.getId());
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
         views.setOnClickFillInIntent(R.id.widget_photo_image, fillInIntent);
