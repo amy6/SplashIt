@@ -9,6 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.splashit.BuildConfig;
 import com.example.splashit.R;
@@ -32,6 +38,17 @@ public class PhotoListActivity extends AppCompatActivity {
     private static final String TAG = PhotoListActivity.class.getSimpleName();
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.errorLayout)
+    ScrollView errorLayout;
+    @BindView(R.id.errorImage)
+    ImageView errorImage;
+    @BindView(R.id.errorText)
+    TextView errorText;
+    @BindView(R.id.errorButton)
+    Button errorButton;
+
     private List<Photo> photos;
     private PhotoRecyclerViewAdapter photoAdapter;
     private GridLayoutManager layoutManager;
@@ -61,6 +78,9 @@ public class PhotoListActivity extends AppCompatActivity {
                     photoAdapter.clear();
                 }
                 photoAdapter.addAll(favorites);
+            } else if (favoritesClicked) {
+                updateEmptyStateViews(R.drawable.no_search_results, R.string.no_favorites,
+                        R.drawable.ic_error_outline, R.string.browse_photos);
             }
         });
 
@@ -100,29 +120,45 @@ public class PhotoListActivity extends AppCompatActivity {
         photoAdapter.clear();
         List<Photo> favoritePhotos = viewModel.getFavoritePhotos().getValue();
         if (favoritePhotos != null && favoritePhotos.size() > 0) {
+            errorLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             photoAdapter.addAll(favoritePhotos);
+        } else {
+            updateEmptyStateViews(R.drawable.no_search_results, R.string.no_favorites,
+                    R.drawable.ic_error_outline, R.string.browse_photos);
         }
     }
 
     private void getPhotosList() {
         favoritesClicked = false;
+        if (PhotoAppUtils.checkInternetConnection(this)) {
+            updateEmptyStateViews(R.drawable.no_internet_connection, R.string.no_internet_connection, R.drawable.ic_cloud_off, R.string.error_try_again);
+            return;
+        }
         photoAdapter.clear();
         ApiClient.getClient().create(ApiService.class)
                 .getPhotos(BuildConfig.UNSPLASH_API_KEY).enqueue(new Callback<List<Photo>>() {
             @Override
             public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
-                if (response.body() != null) {
-                    photoAdapter.addAll(response.body());
-                    Log.i(TAG, "Photos retrieved " + photos.size());
-                    if (recyclerViewState != null) {
-                        layoutManager.onRestoreInstanceState(recyclerViewState);
-                    }
+                if (response.body() == null || response.body().size() == 0) {
+                    updateEmptyStateViews(R.drawable.no_search_results, R.string.no_search_results, R.drawable.ic_photo_library, R.string.error_no_results);
+                    return;
+                }
+                photoAdapter.addAll(response.body());
+                Log.i(TAG, "Photos retrieved " + photos.size());
+                errorLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                if (recyclerViewState != null) {
+                    layoutManager.onRestoreInstanceState(recyclerViewState);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Photo>> call, Throwable t) {
                 Log.i(TAG, "Call to get photos failed  : " + t);
+                updateEmptyStateViews(R.drawable.no_search_results, R.string.no_search_results, R.drawable.ic_error_outline, R.string.error_no_results);
             }
         });
     }
@@ -130,5 +166,17 @@ public class PhotoListActivity extends AppCompatActivity {
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Constants.LAYOUT_MANAGER_STATE, layoutManager.onSaveInstanceState());
+    }
+
+    private void updateEmptyStateViews(int errorImage, int errorText, int errorTextDrawable, int errorButtonText) {
+
+        errorLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+
+        this.errorImage.setImageResource(errorImage);
+        this.errorText.setText(errorText);
+        this.errorText.setCompoundDrawablesWithIntrinsicBounds(0, errorTextDrawable, 0, 0);
+        errorButton.setText(errorButtonText);
     }
 }

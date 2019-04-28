@@ -13,4 +13,10 @@
     <string name="wallpaper_updat_failure">Failed to set wallpaper. Try again later.</string>
     <string name="favorites">Favorites</string>
     <string name="list">List</string>
+    <string name="no_internet_connection">Uh oh! Your network is unavailable. Please check your data or wifi connection.</string>
+    <string name="error_try_again">Try Again</string>
+    <string name="error_no_results">Okay, Thanks</string>
+    <string name="no_search_results">Sorry! No results found. Please try again after sometime.</string>
+    <string name="no_favorites">No favorites saved.</string>
+    <string name="browse_photos">Browse Photos</string>
 </resources>

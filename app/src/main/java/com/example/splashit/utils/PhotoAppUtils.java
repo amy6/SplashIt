@@ -1,12 +1,26 @@
 package com.example.splashit.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 public class PhotoAppUtils {
+
+    public static boolean checkInternetConnection(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+
+        return networkInfo == null || !networkInfo.isConnectedOrConnecting();
+    }
 
     public static void setupRecyclerView(Context context, RecyclerView recyclerView) {
 
