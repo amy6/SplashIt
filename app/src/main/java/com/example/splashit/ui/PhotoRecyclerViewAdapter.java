@@ -52,6 +52,16 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
         return values.size();
     }
 
+    public void clear() {
+        this.values.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Photo> photos) {
+        this.values.addAll(photos);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView imageView;
         public Photo photo;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/list"
+        android:icon="@drawable/ic_photo_library"
+        android:title="@string/list"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/favorites"
+        android:icon="@drawable/ic_favorite"
+        android:title="@string/favorites"
+        app:showAsAction="always"/>
+</menu>
