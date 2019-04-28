@@ -22,6 +22,9 @@ android {
         debug {
             buildConfigField "String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY
         }
+        release {
+            buildConfigField "String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
