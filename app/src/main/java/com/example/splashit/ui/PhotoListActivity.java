@@ -26,6 +26,7 @@ import com.example.splashit.data.network.ApiClient;
 import com.example.splashit.data.network.ApiService;
 import com.example.splashit.utils.Constants;
 import com.example.splashit.utils.PhotoAppUtils;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,8 @@ import retrofit2.Response;
 public class PhotoListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private static final String TAG = PhotoListActivity.class.getSimpleName();
+    public static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
@@ -69,6 +72,8 @@ public class PhotoListActivity extends AppCompatActivity implements SwipeRefresh
         setContentView(R.layout.activity_photo_list);
 
         ButterKnife.bind(this);
+
+        MobileAds.initialize(this, ADMOB_APP_ID);
 
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));

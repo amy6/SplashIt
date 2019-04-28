@@ -27,9 +27,11 @@ import com.example.splashit.utils.AppExecutors;
 import com.example.splashit.utils.Constants;
 import com.example.splashit.utils.PhotoAppUtils;
 import com.example.splashit.widget.PhotoAppWidget;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -46,6 +48,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     @BindView(R.id.image) ImageView photoImage;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.adView) AdView adView;
 
     private PhotoDetailViewModel viewModel;
     private MenuItem favoritesItem;
@@ -60,6 +63,9 @@ public class PhotoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_detail);
 
         ButterKnife.bind(this);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         setSupportActionBar(toolbar);
 
