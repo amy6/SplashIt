@@ -50,6 +50,7 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
         List<Photo> photoList = db.photoDao().getFavoritesPhotosList();
         if (photoList != null) {
+            favoritesPhotos.clear();
             favoritesPhotos.addAll(photoList);
         }
     }

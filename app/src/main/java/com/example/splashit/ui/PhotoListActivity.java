@@ -1,6 +1,8 @@
 package com.example.splashit.ui;
 
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
+import com.example.splashit.PhotoAppWidget;
 import com.example.splashit.R;
 import com.example.splashit.data.model.Photo;
 import com.example.splashit.data.network.ApiClient;
@@ -83,6 +86,13 @@ public class PhotoListActivity extends AppCompatActivity implements SwipeRefresh
 
         viewModel = ViewModelProviders.of(this).get(PhotoListViewModel.class);
         viewModel.getFavoritePhotos().observe(this, favorites -> {
+            if (favorites != null) {
+                AppWidgetManager.getInstance(PhotoListActivity.this).notifyAppWidgetViewDataChanged(
+                        AppWidgetManager.getInstance(PhotoListActivity.this).getAppWidgetIds(new ComponentName(
+                                PhotoListActivity.this, PhotoAppWidget.class
+                        )), R.id.widget_grid_view
+                );
+            }
             if (favorites != null && favoritesClicked) {
                 if (photos == null) {
                     photos = new ArrayList<>();
