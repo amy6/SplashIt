@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
-import com.example.splashit.PhotoAppWidget;
+import com.example.splashit.widget.PhotoAppWidget;
 import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
 import com.example.splashit.data.model.Photo;

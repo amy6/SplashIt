@@ -1,4 +1,4 @@
-package com.example.splashit;
+package com.example.splashit.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -8,10 +8,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.example.splashit.ui.PhotoDetailActivity;
+import com.example.splashit.R;
 import com.example.splashit.utils.Constants;
-import com.example.splashit.widget.GridWidgetService;
-import com.example.splashit.widget.PhotoWallpaperService;
 
 /**
  * Implementation of App Widget functionality.
