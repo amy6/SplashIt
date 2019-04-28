@@ -24,7 +24,8 @@
                 android:resource="@xml/photo_app_widget_info"/>
         </receiver>
 
-        <activity android:name=".ui.PhotoDetailActivity">
+        <activity android:name=".ui.PhotoDetailActivity"
+            android:theme="@style/AppThemeToolbar">
         </activity>
         <activity android:name=".ui.PhotoListActivity">
             <intent-filter>

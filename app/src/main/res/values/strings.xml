@@ -5,8 +5,6 @@
     <string name="favorite">Favorite</string>
     <string name="favorites_removed">Removed from favorites</string>
     <string name="favorites_added">Added to favorites</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
     <string name="empty_view_text">No images available</string>
     <string name="wallpaper">Wallpaper</string>
     <string name="wallpaper_update_success">Wallpaper updated</string>

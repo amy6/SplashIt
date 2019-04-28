@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -17,8 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
-import com.example.splashit.utils.PhotoAppUtils;
-import com.example.splashit.widget.PhotoAppWidget;
 import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
 import com.example.splashit.data.model.Photo;
@@ -26,6 +25,8 @@ import com.example.splashit.data.network.ApiClient;
 import com.example.splashit.data.network.ApiService;
 import com.example.splashit.utils.AppExecutors;
 import com.example.splashit.utils.Constants;
+import com.example.splashit.utils.PhotoAppUtils;
+import com.example.splashit.widget.PhotoAppWidget;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.image) ImageView photoImage;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     private PhotoDetailViewModel viewModel;
     private MenuItem favoritesItem;
@@ -58,6 +60,8 @@ public class PhotoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_detail);
 
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
 
         viewModel = ViewModelProviders.of(this).get(PhotoDetailViewModel.class);
 
@@ -156,7 +160,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
                     inputStream = new URL(photo.getUrls().getRaw()).openStream();
                     wallpaperManager.setStream(inputStream);
                     displayToastMessage(R.string.wallpaper_update_success);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     displayToastMessage(R.string.wallpaper_update_failure);
                     e.printStackTrace();
                 }

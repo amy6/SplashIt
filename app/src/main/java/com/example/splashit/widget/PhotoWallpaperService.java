@@ -5,7 +5,9 @@ import android.app.WallpaperManager;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
 import com.example.splashit.utils.Constants;
 
@@ -40,7 +42,9 @@ public class PhotoWallpaperService extends IntentService {
             try {
                 inputStream = new URL(url).openStream();
                 wallpaperManager.setStream(inputStream);
-            } catch (IOException e) {
+                Toast.makeText(this, R.string.wallpaper_update_success, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, R.string.wallpaper_update_failure, Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
