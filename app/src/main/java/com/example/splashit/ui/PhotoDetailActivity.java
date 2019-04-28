@@ -11,7 +11,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
@@ -40,6 +42,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     private static final String TAG = PhotoDetailActivity.class.getSimpleName();
 
     @BindView(R.id.image) ImageView photoImage;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     private PhotoDetailViewModel viewModel;
     private MenuItem favoritesItem;
@@ -69,15 +72,16 @@ public class PhotoDetailActivity extends AppCompatActivity {
                                         Picasso.with(PhotoDetailActivity.this)
                                                 .load(Uri.parse(response.body().getUrls().getRaw()))
                                                 .into(photoImage);
+                                        progressBar.setVisibility(View.INVISIBLE);
                                     }
                                 }
 
                                 @Override public void onFailure(Call<Photo> call, Throwable t) {
                                     Log.e(TAG, "Call to get photo failed : " + t);
+                                    displayToastMessage(R.string.wallpaper_load_failure);
                                 }
                             });
                 }
-//                getSupportFragmentManager().beginTransaction().add(R.id.container, PhotoDetailFragment.newInstance(photoId)).commit();
             }
         }
 
@@ -130,9 +134,9 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 try {
                     inputStream = new URL(photo.getUrls().getRaw()).openStream();
                     wallpaperManager.setStream(inputStream);
-                    displayToastMessage(R.string.wallpaper_updat_success);
+                    displayToastMessage(R.string.wallpaper_update_success);
                 } catch (IOException e) {
-                    displayToastMessage(R.string.wallpaper_updat_failure);
+                    displayToastMessage(R.string.wallpaper_update_failure);
                     e.printStackTrace();
                 }
                 return true;
