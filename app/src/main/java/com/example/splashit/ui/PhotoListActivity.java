@@ -3,6 +3,8 @@ package com.example.splashit.ui;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
 import com.example.splashit.R;
@@ -33,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PhotoListActivity extends AppCompatActivity {
+public class PhotoListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private static final String TAG = PhotoListActivity.class.getSimpleName();
     @BindView(R.id.recyclerView)
@@ -48,6 +51,8 @@ public class PhotoListActivity extends AppCompatActivity {
     TextView errorText;
     @BindView(R.id.errorButton)
     Button errorButton;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
     private List<Photo> photos;
     private PhotoRecyclerViewAdapter photoAdapter;
@@ -55,6 +60,8 @@ public class PhotoListActivity extends AppCompatActivity {
     private Parcelable recyclerViewState;
     private PhotoListViewModel viewModel;
     private boolean favoritesClicked;
+    private boolean fromErrorButton;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,11 @@ public class PhotoListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_list);
 
         ButterKnife.bind(this);
+
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
+
+        errorButton.setOnClickListener(this);
 
         photos = new ArrayList<>();
         photoAdapter = new PhotoRecyclerViewAdapter(this, photos);
@@ -147,6 +159,7 @@ public class PhotoListActivity extends AppCompatActivity {
                 }
                 photoAdapter.addAll(response.body());
                 Log.i(TAG, "Photos retrieved " + photos.size());
+                refreshLayout.setRefreshing(false);
                 errorLayout.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -178,5 +191,55 @@ public class PhotoListActivity extends AppCompatActivity {
         this.errorText.setText(errorText);
         this.errorText.setCompoundDrawablesWithIntrinsicBounds(0, errorTextDrawable, 0, 0);
         errorButton.setText(errorButtonText);
+    }
+
+    @Override public void onRefresh() {
+        recyclerView.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
+
+        if (!fromErrorButton) {
+            progressBar.setVisibility(View.GONE);
+        } else {
+            displayToast(getString(R.string.trying_again_alert));
+            fromErrorButton = false;
+        }
+
+        getPhotosList();
+    }
+
+    @Override public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.errorButton:
+                if (((Button) v).getText().toString().trim().equalsIgnoreCase(getString(R.string.error_try_again))) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    fromErrorButton = true;
+                    onRefresh();
+                } else if (((Button) v).getText().toString().trim().equalsIgnoreCase(getString(R.string.browse_photos))) {
+                    errorLayout.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    getPhotosList();
+                } else {
+                    finish();
+                }
+                break;
+        }
+    }
+
+    private void displayToast(String message) {
+        cancelToast();
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void cancelToast() {
+        if (toast != null) {
+            toast.cancel();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cancelToast();
     }
 }
