@@ -81,9 +81,15 @@ public class PhotoListActivity extends AppCompatActivity implements SwipeRefresh
         recyclerView.setAdapter(photoAdapter);
         layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
 
+        if (savedInstanceState != null) {
+            recyclerViewState = savedInstanceState.getParcelable(Constants.LAYOUT_MANAGER_STATE);
+            layoutManager.onRestoreInstanceState(recyclerViewState);
+            favoritesClicked = savedInstanceState.getBoolean(Constants.FAVORITES_CLICKED);
+        }
+
         viewModel = ViewModelProviders.of(this).get(PhotoListViewModel.class);
         viewModel.getFavoritePhotos().observe(this, favorites -> {
-            if (favorites != null && favoritesClicked) {
+            if (favorites != null && favorites.size() > 0 && favoritesClicked) {
                 if (photos == null) {
                     photos = new ArrayList<>();
                 } else {
@@ -96,12 +102,9 @@ public class PhotoListActivity extends AppCompatActivity implements SwipeRefresh
             }
         });
 
-        if (savedInstanceState != null) {
-            recyclerViewState = savedInstanceState.getParcelable(Constants.LAYOUT_MANAGER_STATE);
-            layoutManager.onRestoreInstanceState(recyclerViewState);
+        if (!favoritesClicked) {
+            getPhotosList();
         }
-
-        getPhotosList();
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,6 +182,7 @@ public class PhotoListActivity extends AppCompatActivity implements SwipeRefresh
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Constants.LAYOUT_MANAGER_STATE, layoutManager.onSaveInstanceState());
+        outState.putBoolean(Constants.FAVORITES_CLICKED, favoritesClicked);
     }
 
     private void updateEmptyStateViews(int errorImage, int errorText, int errorTextDrawable, int errorButtonText) {

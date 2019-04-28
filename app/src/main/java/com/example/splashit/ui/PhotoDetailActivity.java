@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.splashit.BuildConfig;
+import com.example.splashit.utils.PhotoAppUtils;
 import com.example.splashit.widget.PhotoAppWidget;
 import com.example.splashit.R;
 import com.example.splashit.data.database.PhotoDatabase;
@@ -59,6 +60,12 @@ public class PhotoDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         viewModel = ViewModelProviders.of(this).get(PhotoDetailViewModel.class);
+
+        if (PhotoAppUtils.checkInternetConnection(this)) {
+            displayToastMessage(R.string.wallpaper_load_failure);
+            progressBar.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         if (getIntent() != null) {
             if (getIntent().hasExtra(Constants.PHOTO_ID)) {
