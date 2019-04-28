@@ -46,6 +46,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
 
     private PhotoDetailViewModel viewModel;
     private MenuItem favoritesItem;
+    private MenuItem wallpaperItem;
     private String photoId;
     private Photo photo;
     private Toast toast;
@@ -73,6 +74,8 @@ public class PhotoDetailActivity extends AppCompatActivity {
                                                 .load(Uri.parse(response.body().getUrls().getRaw()))
                                                 .into(photoImage);
                                         progressBar.setVisibility(View.INVISIBLE);
+                                        favoritesItem.setEnabled(true);
+                                        wallpaperItem.setEnabled(true);
                                     }
                                 }
 
@@ -93,6 +96,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.photo_detail_menu, menu);
         favoritesItem = menu.findItem(R.id.favorite);
+        wallpaperItem = menu.findItem(R.id.wallpaper);
         AppExecutors.getExecutorInstance().getDiskIO().execute(() -> {
             boolean isFavorite = viewModel.isFavorite(photoId);
             if (isFavorite) {
@@ -102,12 +106,18 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 runOnUiThread(() -> favoritesItem.setIcon(R.drawable.ic_favorite_border));
             }
         });
+        favoritesItem.setEnabled(false);
+        wallpaperItem.setEnabled(false);
         return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorite:
+                if (!favoritesItem.isEnabled()) {
+                    displayToastMessage(R.string.wallpaper_load_in_progress);
+                    return false;
+            }
                 AppExecutors.getExecutorInstance().getDiskIO().execute(() -> {
                             boolean isFavorite = viewModel.isFavorite(photoId);
                             if (isFavorite) {
@@ -129,6 +139,10 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 updateWidget();
                 return true;
             case R.id.wallpaper:
+                if (!wallpaperItem.isEnabled()) {
+                    displayToastMessage(R.string.wallpaper_load_in_progress);
+                    return false;
+                }
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
                 InputStream inputStream;
                 try {
